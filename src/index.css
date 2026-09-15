@@ -1,0 +1,157 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 240 5.9% 10%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 5.9% 10%;
+    --radius: 0.5rem;
+    --light-gray: 0 0% 96%; /* #f5f5f5 equivalent */
+    --lighter-gray: 0 0% 98%; /* #fafafa equivalent */
+    --light-gray-border: 0 0% 90%; /* #e6e6e6 equivalent */
+  }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
+  }
+}
+
+@layer components {
+  /*
+    The page's single content width. Everything that should line up vertically
+    down the page — section content, and the hero banner above it — measures
+    itself with this and nothing else.
+
+    Do NOT reach for Tailwind's `container` here. It is configured (tailwind.config.ts)
+    to 2rem padding capped at 1400px, so anything using it sits ~340px wider than
+    a section at desktop widths and drifts differently at every breakpoint. That
+    mismatch is exactly what this class exists to prevent.
+  */
+  .content-container {
+    @apply max-w-5xl mx-auto px-4;
+  }
+
+  /*
+    The content width, plus the vertical rhythm an admin page wants.
+
+    This was py-16 md:py-24 - 64px of dead space above the nav on a phone -
+    because it came from a marketing page, where a section needs that much air
+    around it. An admin screen is a tool: the first control should be near the
+    top of the viewport, not below the fold.
+  */
+  .section-container {
+    @apply content-container py-6 md:py-10;
+  }
+  
+  .nav-link {
+    @apply relative px-3 py-2 hover:text-primary transition-colors duration-200;
+  }
+  
+  .nav-link.active {
+    @apply text-primary;
+  }
+  
+  .nav-link.active::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-full h-0.5 bg-primary transform;
+  }
+  
+  /* Custom button styles */
+  .custom-button {
+    @apply bg-transparent border border-white rounded-xl hover:bg-blue-500 hover:border-blue-500 transition-all duration-300 shadow-md hover:shadow-lg;
+  }
+
+  /* Light gray section */
+  .bg-light-gray {
+    @apply bg-[hsl(var(--light-gray))];
+  }
+
+  .border-light-gray {
+    @apply border-[hsl(var(--light-gray-border))];
+  }
+}
+
+@layer utilities {
+  .page-transitions-enter {
+    @apply opacity-0;
+  }
+  
+  .page-transitions-enter-active {
+    @apply opacity-100 transition-opacity duration-300;
+  }
+  
+  .page-transitions-exit {
+    @apply opacity-100;
+  }
+  
+  .page-transitions-exit-active {
+    @apply opacity-0 transition-opacity duration-300;
+  }
+}
+
+/*
+  There were three bare `section` rules here - min-height:100vh, a -5rem margin
+  and a #about hero - inherited wholesale from the marketing site this stylesheet
+  was copied from. They are gone, and they must not come back.
+
+  Nothing in this app renders a <section>. Sonner's Toaster does, though, and it
+  is mounted at the top of the tree - so those rules turned the invisible toast
+  container into a full-viewport block above every page. That is what put a blank
+  first screen on top of the admin on a phone: 100vh of nothing, plus a -5rem
+  margin dragging the whole document up under the address bar.
+
+  A bare element selector in a shared stylesheet reaches markup nobody was
+  thinking about. If a rule is meant for one layout, scope it to a class.
+*/

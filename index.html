@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<!-- Light, always — same choice admin.naxits made: no theme toggle exists, so
+     this is pinned in the markup rather than left to the OS/browser default. -->
+<html lang="en" class="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tracker · NAX IT Solutions</title>
+
+    <!-- A private personal tool, not a page anyone should reach from a search
+         result. It is not secret - the password is what protects it - but there
+         is nothing here worth indexing, and a crawler only ever sees the lock
+         screen. public/robots.txt says the same thing for crawlers that read it
+         instead of the meta tag. -->
+    <meta name="robots" content="noindex, nofollow" />
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
