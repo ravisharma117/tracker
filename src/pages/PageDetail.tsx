@@ -43,7 +43,6 @@ import { taskRefComponents } from "@/components/TaskRefBadge";
 import { useManageSession } from "@/lib/manageSession";
 import { handleWriteError } from "@/lib/managePassword";
 import { downloadMarkdown, pageFilename, serializePageMarkdown } from "@/lib/markdown";
-import { MARKER_PATTERN } from "@/lib/taskRef";
 import { remarkTaskRef, taskRefHandlers } from "@/lib/taskRefPlugin";
 import {
   createPage,
@@ -64,7 +63,10 @@ import {
   type TrackerTask,
 } from "@/lib/trackerApi";
 
-const isMarkerOnly = (line: string) => new RegExp(`^(?:${MARKER_PATTERN.source})$`).test(line.trim());
+// Extraction appends the marker after the line's own text rather than
+// replacing it, so "already extracted" means "ends with a marker" now.
+const TRAILING_MARKER = /[⁰¹²³⁴⁵⁶⁷⁸⁹]+$/;
+const alreadyExtracted = (line: string) => TRAILING_MARKER.test(line.trim());
 
 /**
  * React Router keeps the same PageDetailView instance mounted when only the
@@ -283,7 +285,7 @@ const PageDetailView = () => {
   const lines = page.content.split("\n");
 
   return (
-    <div className="max-w-3xl">
+    <div className="w-full">
       <nav className="mb-4 flex flex-wrap items-center gap-1 text-sm text-muted-foreground">
         <Link to="/pages" className="hover:text-foreground">
           Pages
@@ -353,7 +355,7 @@ const PageDetailView = () => {
                 <p className="mb-3 text-xs text-muted-foreground">
                   Hover a line to extract it as a task.
                 </p>
-                <div className="prose prose-sm max-w-none dark:prose-invert">
+                <div className="prose prose-sm max-w-none dark:prose-invert min-h-[65vh]">
                   {lines.map((line, index) => {
                     if (line.trim() === "") return <div key={index} className="h-3" />;
 
@@ -375,7 +377,7 @@ const PageDetailView = () => {
                         >
                           {line}
                         </ReactMarkdown>
-                        {!isMarkerOnly(line) && (
+                        {!alreadyExtracted(line) && (
                           <button
                             type="button"
                             onClick={() => onExtractLine(index, line)}
@@ -520,7 +522,12 @@ const PageDetailView = () => {
               className="text-lg font-semibold"
               autoFocus
             />
-            <MarkdownEditor key={page.id + page.updated_at} ref={editorRef} initialValue={page.content} />
+            <MarkdownEditor
+              key={page.id + page.updated_at}
+              ref={editorRef}
+              initialValue={page.content}
+              height="70vh"
+            />
             <div className="flex justify-end gap-2">
               <Button type="button" variant="outline" onClick={cancelEdit} disabled={isSaving}>
                 Cancel

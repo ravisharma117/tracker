@@ -49,8 +49,8 @@ const TrackerLayout = () => {
   };
 
   return (
-    <div className="section-container animate-slide-in">
-      <div className="mb-6 border-b pb-4 md:mb-8">
+    <div className="flex h-screen flex-col px-4 py-4 animate-slide-in md:px-8">
+      <div className="mb-4 shrink-0 border-b pb-4">
         <div className="flex items-center justify-between gap-3 md:hidden">
           <Link to="/pages" className="text-lg font-semibold">
             Tracker
@@ -101,7 +101,9 @@ const TrackerLayout = () => {
         </div>
       </div>
 
-      <Outlet context={session} />
+      <div className="min-h-0 flex-1 overflow-y-auto">
+        <Outlet context={session} />
+      </div>
     </div>
   );
 };

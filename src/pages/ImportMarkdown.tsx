@@ -83,7 +83,7 @@ const ImportMarkdown = () => {
   };
 
   return (
-    <div className="max-w-2xl">
+    <div className="mx-auto max-w-2xl">
       <h1 className="mb-1 text-3xl font-bold tracking-tight">Import Markdown</h1>
       <p className="mb-6 text-muted-foreground">
         A .md file with an "# Name" line — everything after it becomes the page's content
